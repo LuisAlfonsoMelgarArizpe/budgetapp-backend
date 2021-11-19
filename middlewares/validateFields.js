@@ -6,7 +6,8 @@ const validateFields = (req, res = response, next) => {
   if (!errors.isEmpty()) {
     return res.status(200).json({
       ok: false,
-      errors: errors.mapped(),
+      validationErrors: errors.array(),
+      msg: errors.array()[0].msg + " for " + errors.array()[0].param,
     });
   }
 
@@ -14,5 +15,5 @@ const validateFields = (req, res = response, next) => {
 };
 
 module.exports = {
-    validateFields 
-}
+  validateFields,
+};
