@@ -22,6 +22,9 @@ app.use("/auth", require("./routes/auth"));
 
 app.use("/account", require("./routes/account"));
 
+app.use("/currency", require("./routes/currency"));
+
+app.use("/operations", require("./routes/operations"));
 
 app.listen(process.env.PORT, async () => {
   console.log(`Server up on port ${process.env.PORT} `);

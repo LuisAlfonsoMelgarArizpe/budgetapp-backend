@@ -8,6 +8,7 @@ const {
   addCategory,
   removeCategory,
   renewToken,
+  updateCategories,
 } = require("../controllers/auth");
 const { validateFields } = require("../middlewares/validateFields");
 const { validateJWT } = require("../middlewares/validateJWT");
@@ -63,13 +64,17 @@ router.put(
   ],
   update
 );
-
-router.get(
-  "/renewToken",
+router.put(
+  "/updateCategories",
   [
+    check("user_id").not().isEmpty(),
+    check("usercategories").not().isEmpty(),
+    validateFields,
     validateJWT,
   ],
-  renewToken
+  updateCategories
 );
+
+router.get("/renewToken", [validateJWT], renewToken);
 
 module.exports = router;

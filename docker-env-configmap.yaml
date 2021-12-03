@@ -1,0 +1,16 @@
+apiVersion: v1
+data:
+  PGCONNECTIONSTRING: postgres://postgres:1234@database:5432/postgres
+  PGDATABASE: postgres
+  PGHOST: database
+  PGPASSWORD: "1234"
+  PGPORT: "5432"
+  PGUSER: postgres
+  PORT: "4000"
+  SECRET_JWT_SEED: Budget_App_$
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: backend-docker-env
+  name: docker-env

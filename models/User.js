@@ -11,6 +11,7 @@ User.init(
     email: DataTypes.STRING,
     password: DataTypes.STRING,
     register_date: { type: DataTypes.DATE, defaultValue: Sequelize.NOW },
+    usercategories : DataTypes.STRING
   },
   { sequelize, modelName: "users", timestamps: false }
 );

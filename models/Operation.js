@@ -6,7 +6,7 @@ class Operation extends Model {}
 
 Operation.init(
   {
-    operation_id: {
+    id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,

@@ -67,6 +67,9 @@ create table operation(
 
 
 
+
+
+
 insert into account_type(type) values ('Savings');
 insert into account_type(type) values ('Monetary');
 
@@ -82,11 +85,27 @@ insert into account_currency VALUES(1,1);
 
 select * from account_currency;
 
+select * from account_type;
+
 select * from account;
 
 select * from users;
 
 select * from operation;
+
+select * from operation_type ot ;
+
+select o.id, u.id as userId , a.account_id, t.operation_type , o.quantity, o."currencyQuantity", 
+    o.operation_date, o.category, o.description, a."holdersName" as accountName, a.number as accountNumber, a.bank as accountBank,
+    c.currency 
+    from operation o 
+    inner join operation_type t on t.operation_type_id  = o.operation_type 
+    inner join account a on a.account_id  = o.account_id 
+    inner join users u on u.id  = a.user_id
+   	inner join currency c on c.currency_id  = o.currency_id 
+    ;
+
+select * from currency c ;
 
 delete from users;
 

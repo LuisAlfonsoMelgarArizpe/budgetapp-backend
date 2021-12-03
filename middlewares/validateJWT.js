@@ -16,6 +16,7 @@ const validateJWT = (req = request, res = response, next) => {
     console.log(`Token verified for ${id} ${email} iat ${iat} exp : ${exp} `);
     req.id = id;
     req.email = email;
+
   } catch (error) {
     console.log(error);
     return res.status(401).json({

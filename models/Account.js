@@ -14,7 +14,7 @@ Account.init(
     },
     bank: DataTypes.STRING,
     number: DataTypes.STRING,
-    balance: DataTypes.FLOAT,
+    holdersName : DataTypes.STRING
   },
   { sequelize, modelName: "account", timestamps: false, freezeTableName: true }
 );

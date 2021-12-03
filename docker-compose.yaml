@@ -1,0 +1,31 @@
+version: "3"
+services:
+  frontend:
+    image : alfonsomelgar/frontend:latest
+    build:
+      context: ../budgetapp-frontend/budget-app/.
+      args:
+        - API_URL=http://34.71.219.156:4000
+    ports:
+      - "3000:80"
+    depends_on:
+      - "backend"
+    links:
+      - "backend"
+
+  backend:
+    image : alfonsomelgar/backend:latest
+    build: .
+    ports:
+      - "4000:4000"
+    depends_on:
+      - "database"
+    env_file: docker.env
+    links:
+      - "database"
+
+  database:
+    image : alfonsomelgar/database:latest
+    build: ./database/.
+    ports:
+      - "5433:5432"

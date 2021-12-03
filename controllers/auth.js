@@ -1,4 +1,5 @@
 const { genSaltSync, hashSync, compareSync } = require("bcryptjs");
+const { verify } = require("jsonwebtoken");
 const connection = require("../database/connection");
 const { generateJWT } = require("../helpers/jwt");
 const Account = require("../models/Account");
@@ -14,11 +15,6 @@ const login = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({
       where: { email },
-      include: {
-        model: Category,
-        as: "categories",
-        attributes: ["category_id", "category"],
-      },
     });
 
     if (!user)
@@ -40,7 +36,9 @@ const login = async (req, res) => {
       user.getDataValue("email")
     );
 
-    res.json({ ok: true, user, token });
+    const { iat, exp } = verify(token, process.env.SECRET_JWT_SEED); //{uid,name}:payload, iat: issued at date, exp:expire date
+
+    res.json({ ok: true, user, token, iat, exp });
   } catch (error) {
     console.log(error);
     return res.status(500).json({
@@ -78,7 +76,9 @@ const register = async (req, res) => {
       newUser.getDataValue("id"),
       newUser.getDataValue("email")
     );
-    return res.json({ ok: true, newUser, token });
+    const { iat, exp } = verify(token, process.env.SECRET_JWT_SEED); //{uid,name}:payload, iat: issued at date, exp:expire date
+
+    res.json({ ok: true, user, token, iat, exp });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -94,12 +94,16 @@ const renewToken = async (req, res) => {
 
     const token = await generateJWT(id, email);
 
+    const { iat, exp } = verify(token, process.env.SECRET_JWT_SEED); //{uid,name}:payload, iat: issued at date, exp:expire date
+
     res.json({
       ok: true,
       message: "token renew",
       token,
       id,
       email,
+      iat,
+      exp,
     });
   } catch (error) {
     console.log(error);
@@ -131,6 +135,24 @@ const update = async (req, res) => {
     });
   }
 };
+
+const updateCategories = async (req, res) => {
+  try {
+    const { user_id, usercategories } = req.body;
+    const account = await connection.query(
+      `UPDATE users set usercategories = '${usercategories}' where id = ${user_id}`
+    );
+
+    res.json({ ok: true });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      ok: false,
+      message: "Error updating user " + error,
+    });
+  }
+};
+
 
 const addCategory = async (req, res) => {
   try {
@@ -180,4 +202,5 @@ module.exports = {
   addCategory,
   removeCategory,
   renewToken,
+  updateCategories
 };
